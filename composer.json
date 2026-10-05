@@ -28,7 +28,7 @@
     "php": "^8.2",
     "ext-zip": "*",
     "cocur/slugify": "^4.6",
-    "guzzlehttp/guzzle": "^7.0",
+    "guzzlehttp/guzzle": "^8.2",
     "symfony/console": "^7.0"
   },
   "require-dev": {
