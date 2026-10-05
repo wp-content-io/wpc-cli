@@ -11,7 +11,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # develop is the default branch: PRs merge there, so it needs its own
+    # run to show the state of what was merged, not only of each PR.
+    branches: [main, develop]
     tags-ignore: ['**'] # tags are built by release.yml
   pull_request:
   workflow_dispatch:
