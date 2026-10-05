@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+// Installed with `composer global require`, this file is reached through
+// Composer's proxy in vendor/bin, and the autoloader is the *consumer's*, not
+// one next to it: Composer >= 2.2 hands its path over in this variable. From a
+// checkout, or inside the phar, the relative path is the one that exists.
+require $_composer_autoload_path ?? __DIR__.'/../vendor/autoload.php';
+
+use WpContent\Cli\Application;
+
+$application = new Application();
+$application->run();

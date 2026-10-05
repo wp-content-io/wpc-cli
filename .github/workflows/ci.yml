@@ -1,0 +1,150 @@
+# Quality gate and phar build for every push and pull request.
+#
+# Publishing lives in release.yml (tags only, behind the `release`
+# environment): nothing here has write access to anything.
+#
+# Every third-party action is pinned to a full commit SHA, with its release
+# in a trailing comment; Dependabot (.github/dependabot.yml, github-actions
+# ecosystem) bumps the SHA and the comment together.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags-ignore: ['**'] # tags are built by release.yml
+  pull_request:
+  workflow_dispatch:
+
+# One run per branch / PR: a new push supersedes the one still running.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Pinned Box release used to compile the phar (no floating global require).
+  BOX_VERSION: "4.7.0"
+
+jobs:
+  quality:
+    name: Quality (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      # Every version an image is published for: one version tested while
+      # four are shipped is three versions taken on trust.
+      matrix:
+        php: ["8.2", "8.3", "8.4", "8.5"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: zip
+          coverage: none
+          tools: composer:v2
+
+      - name: Get the Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('composer.lock', 'vendor-bin/*/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-${{ matrix.php }}-
+
+      # composer-bin-plugin forwards the install to vendor-bin/ (Box,
+      # PHP-CS-Fixer), so `composer cs` has its tool.
+      - run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHPUnit
+        run: composer test
+
+      # Both ends of the supported range: the minimum composer.json declares
+      # and the newest stable PHP.
+      - name: PHPStan
+        if: matrix.php == '8.2' || matrix.php == '8.5'
+        run: composer analyse
+
+      # Style does not depend on the PHP version: once is enough.
+      - name: PHP-CS-Fixer
+        if: matrix.php == '8.2'
+        run: composer cs
+
+  phar:
+    name: Build wpc.phar
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Box stamps the version from git (`git-tag: cli_version` in box.json),
+      # which needs a tag in the history it can see: a shallow clone has none,
+      # and the compile fails.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # The phar is built on the minimum supported PHP, so it runs on all of
+      # them.
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: "8.2"
+          extensions: zip
+          coverage: none
+          tools: composer:v2
+          ini-values: phar.readonly=0
+
+      - run: composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
+
+      - name: Install Box ${{ env.BOX_VERSION }}
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/box" "https://github.com/box-project/box/releases/download/${BOX_VERSION}/box.phar"
+          chmod +x "$RUNNER_TEMP/box"
+
+      # Until the repository has a tag reachable from HEAD (a fork without
+      # tags, the first commits of the public repository), Box's `git-tag`
+      # has nothing to read and refuses to compile. The phar is then stamped
+      # `dev-<sha>` instead, through a throwaway copy of box.json: a version
+      # Update\Version reads as *unknown* (not release-shaped), so a CI build
+      # never takes part in a version comparison.
+      - name: Compile
+        run: |
+          config=box.json
+          if ! git describe --tags --abbrev=0 >/dev/null 2>&1; then
+            echo "::notice::No tag reachable from HEAD: stamping dev-${GITHUB_SHA::7}"
+            jq --arg v "dev-${GITHUB_SHA::7}" 'del(."git-tag") + {replacements: {cli_version: $v}}' box.json > box.ci.json
+            config=box.ci.json
+          fi
+          php -d phar.readonly=0 "$RUNNER_TEMP/box" compile --config "$config" --no-interaction
+          chmod +x wpc.phar
+          sha256sum wpc.phar | cut -d' ' -f1 > wpc.phar.sha256
+
+      # Smoke test the artifact, not just the sources: a phar missing
+      # symfony/console's completion resources fails on *every* invocation,
+      # and nothing in the test suite would notice.
+      - name: Smoke test
+        run: |
+          php wpc.phar --version
+          php wpc.phar > /dev/null
+          php wpc.phar plugin > /dev/null
+          php wpc.phar plugin list --help > /dev/null
+          php wpc.phar list --raw > /dev/null
+          php wpc.phar completion bash > /dev/null
+          php wpc.phar --output=json | jq -e '.commands | length > 0' > /dev/null
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wpc-phar
+          path: |
+            wpc.phar
+            wpc.phar.sha256
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,22 @@
+{
+  "chmod": "0755",
+  "directories": [
+    "src"
+  ],
+  "files": [],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": ["test", "tests", "Tests"],
+      "in": "vendor"
+    },
+    {
+      "name": ["*.bash", "*.zsh", "*.fish"],
+      "in": "vendor/symfony/console/Resources"
+    }
+  ],
+  "git-tag": "cli_version",
+  "main": "bin/wpc",
+  "output": "wpc.phar",
+  "stub": true
+}

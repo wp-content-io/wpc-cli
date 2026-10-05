@@ -1,0 +1,72 @@
+{
+  "name": "wpcontent/wpc-cli",
+  "description": "wpc, the wp-content.io CLI: build private WordPress plugins and themes and push them to your wp-content.io registry",
+  "type": "project",
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "theme",
+    "cli",
+    "private-repository",
+    "deployment",
+    "phar"
+  ],
+  "homepage": "https://wp-content.io",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexandre Chastan",
+      "email": "bonjour@alexch.fr"
+    }
+  ],
+  "support": {
+    "docs": "https://docs.wp-content.io/cli",
+    "issues": "https://github.com/wp-content-io/wpc-cli/issues",
+    "source": "https://github.com/wp-content-io/wpc-cli"
+  },
+  "require": {
+    "php": "^8.2",
+    "ext-zip": "*",
+    "cocur/slugify": "^4.6",
+    "guzzlehttp/guzzle": "^7.0",
+    "symfony/console": "^7.0"
+  },
+  "require-dev": {
+    "bamarni/composer-bin-plugin": "^1.8",
+    "phpunit/phpunit": "^11.5",
+    "phpstan/phpstan": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "WpContent\\Cli\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WpContent\\Cli\\Tests\\": "tests/"
+    }
+  },
+  "bin": ["bin/wpc"],
+  "config": {
+    "sort-packages": true,
+    "platform": {
+      "php": "8.2.0"
+    },
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true
+    }
+  },
+  "extra": {
+    "bamarni-bin": {
+      "bin-links": false,
+      "forward-command": true
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "analyse": "phpstan analyse --memory-limit=1G",
+    "cs": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff",
+    "cs:fix": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix",
+    "box": "@php -d phar.readonly=0 vendor-bin/box/vendor/bin/box"
+  }
+}

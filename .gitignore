@@ -1,0 +1,28 @@
+# Dependencies
+/vendor/
+/vendor-bin/**/vendor/
+/.composer-cache/
+
+# Build output (the phar is a release asset, never committed)
+*.phar
+/wpc.phar.sha256
+/box.ci.json
+/manifest.json
+
+# Local configuration — may hold an API key, never commit it
+.env
+.envrc
+
+# Tool caches and reports
+/.phpunit.cache/
+/.php-cs-fixer.cache
+/coverage.xml
+/coverage/
+
+# Editors and OS
+/.idea/
+/.vscode/
+.DS_Store
+
+# Local Claude Code settings (CLAUDE.md itself is versioned)
+/.claude/settings.local.json

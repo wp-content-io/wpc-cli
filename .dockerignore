@@ -1,0 +1,11 @@
+.git
+.idea
+.env
+vendor
+vendor-bin
+tests
+.composer-cache
+.phpunit.cache
+.php-cs-fixer.cache
+**/node_modules
+**/dist

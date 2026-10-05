@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://docs.wp-content.io/cli
+    about: Installation, commands, configuration and CI recipes for wpc.
+  - name: Report a security vulnerability
+    url: https://github.com/wp-content-io/wpc-cli/security/policy
+    about: Please report security problems privately, never in a public issue.
+  - name: wp-content.io service (account, registry, dashboard)
+    url: https://docs.wp-content.io/
+    about: Problems with the hosted service rather than the CLI are handled outside this repository.

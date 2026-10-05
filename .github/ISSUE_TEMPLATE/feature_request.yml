@@ -1,0 +1,52 @@
+name: Feature request
+description: Suggest a new command, option or behaviour for wpc.
+labels: [enhancement, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Commands, options, output formats and exit codes are wpc's public API: scripts and CI
+        pipelines update themselves with `self-update`, so changes to existing behaviour are made
+        very carefully. New, additive behaviour is the easiest to accept.
+
+        Some features need the wp-content.io registry API to support them first; that part is
+        not in this repository.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and what gets in the way today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: The command line you would like to type, and what it should print (human and `--output=json`).
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+
+  - type: dropdown
+    id: context
+    attributes:
+      label: Where would you use it?
+      multiple: true
+      options:
+        - Interactively, in a terminal
+        - In CI / scripts
+        - In the Docker image
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to open a pull request for this.

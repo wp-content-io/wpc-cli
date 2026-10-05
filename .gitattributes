@@ -1,0 +1,31 @@
+# Normalise line endings: the phar stub, the shell completions and the test
+# fixtures all assume LF.
+* text=auto eol=lf
+
+# Binary files.
+*.phar binary
+*.png  binary
+*.zip  binary
+
+# Kept out of `git archive` — which is also what Packagist / Composer install
+# as the dist of `composer global require wpcontent/wpc-cli`. That package
+# only needs bin/, src/, composer.json/lock and the user-facing docs.
+#
+# Never add bin/, src/ or composer.* here: the Composer install would break.
+/.github/                export-ignore
+/tests/                  export-ignore
+/vendor-bin/             export-ignore
+/.editorconfig           export-ignore
+/.gitattributes          export-ignore
+/.gitignore              export-ignore
+/.dockerignore           export-ignore
+/.php-cs-fixer.dist.php  export-ignore
+/phpstan.neon            export-ignore
+/phpunit.xml.dist        export-ignore
+/box.json                export-ignore
+/Dockerfile              export-ignore
+/CLAUDE.md               export-ignore
+/AGENTS.md               export-ignore
+/CONTRIBUTING.md         export-ignore
+/CODE_OF_CONDUCT.md      export-ignore
+# Kept on purpose: README.md, CHANGELOG.md, LICENSE, SECURITY.md.

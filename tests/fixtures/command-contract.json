@@ -1,0 +1,594 @@
+{
+    "plugin build": {
+        "name": "plugin build",
+        "description": "Generate zip file to export",
+        "aliases": [
+            "plugin:build"
+        ],
+        "arguments": {
+            "input": {
+                "required": false,
+                "isArray": false,
+                "default": "@CWD@",
+                "description": "Input directory container plugin sources"
+            }
+        },
+        "options": {
+            "clean": {
+                "shortcut": null,
+                "acceptValue": false,
+                "valueRequired": false,
+                "isArray": false,
+                "default": false,
+                "description": "Remove zip file after uploading"
+            },
+            "filename": {
+                "shortcut": "f",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Zip filename"
+            },
+            "header": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": true,
+                "default": [],
+                "description": "Override plugin header"
+            },
+            "message": {
+                "shortcut": "m",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Release notes for this version"
+            },
+            "output-dir": {
+                "shortcut": "o",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": "../dist",
+                "description": "Output directory for the ZIP file"
+            },
+            "push": {
+                "shortcut": "p",
+                "acceptValue": false,
+                "valueRequired": false,
+                "isArray": false,
+                "default": false,
+                "description": "Push zip to repository"
+            },
+            "slug": {
+                "shortcut": "s",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Plugin slug (if no slug is provided, current directory will be used)"
+            }
+        }
+    },
+    "plugin info": {
+        "name": "plugin info",
+        "description": "Get plugin information from distant repository",
+        "aliases": [
+            "plugin:info"
+        ],
+        "arguments": {
+            "slug": {
+                "required": true,
+                "isArray": false,
+                "default": null,
+                "description": "Plugin slug"
+            }
+        },
+        "options": []
+    },
+    "plugin init": {
+        "name": "plugin init",
+        "description": "Start a new plugin",
+        "aliases": [
+            "plugin start",
+            "plugin:init",
+            "plugin:start"
+        ],
+        "arguments": {
+            "name": {
+                "required": false,
+                "isArray": false,
+                "default": null,
+                "description": "Plugin name"
+            },
+            "slug": {
+                "required": false,
+                "isArray": false,
+                "default": null,
+                "description": "Plugin slug"
+            }
+        },
+        "options": {
+            "author": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Author plugin header"
+            },
+            "author-uri": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Author URI plugin header"
+            },
+            "description": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Description plugin header"
+            },
+            "domain-path": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Domain Path plugin header"
+            },
+            "license": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "License plugin header"
+            },
+            "license-uri": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "License URI plugin header"
+            },
+            "network": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Network plugin header"
+            },
+            "plugin-uri": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Plugin URI plugin header"
+            },
+            "plugin-version": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Version plugin header"
+            },
+            "requires-at-least": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Requires at least plugin header"
+            },
+            "requires-php": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Requires PHP plugin header"
+            },
+            "text-domain": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Text Domain plugin header"
+            }
+        }
+    },
+    "plugin list": {
+        "name": "plugin list",
+        "description": "List plugins on the remote repository",
+        "aliases": [
+            "plugin ls",
+            "plugin:list",
+            "plugin:ls"
+        ],
+        "arguments": [],
+        "options": {
+            "page": {
+                "shortcut": "p",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Page number"
+            },
+            "per-page": {
+                "shortcut": "c",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Number of items per page"
+            }
+        }
+    },
+    "plugin manifest": {
+        "name": "plugin manifest",
+        "description": "Get manifest from input file",
+        "aliases": [
+            "plugin:manifest"
+        ],
+        "arguments": {
+            "input": {
+                "required": true,
+                "isArray": false,
+                "default": null,
+                "description": "Path to the plugin main file"
+            }
+        },
+        "options": {
+            "get": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Print a single header value instead of the whole manifest"
+            }
+        }
+    },
+    "plugin push": {
+        "name": "plugin push",
+        "description": "Push input zip to repository",
+        "aliases": [
+            "plugin:push"
+        ],
+        "arguments": {
+            "artifact": {
+                "required": true,
+                "isArray": false,
+                "default": null,
+                "description": "Path to zip file"
+            }
+        },
+        "options": {
+            "clean": {
+                "shortcut": null,
+                "acceptValue": false,
+                "valueRequired": false,
+                "isArray": false,
+                "default": false,
+                "description": "Remove zip file after uploading"
+            },
+            "message": {
+                "shortcut": "m",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Release notes for this version"
+            }
+        }
+    },
+    "theme build": {
+        "name": "theme build",
+        "description": "Generate zip file to export",
+        "aliases": [
+            "theme:build"
+        ],
+        "arguments": {
+            "input": {
+                "required": false,
+                "isArray": false,
+                "default": "@CWD@",
+                "description": "Input directory container theme sources"
+            }
+        },
+        "options": {
+            "clean": {
+                "shortcut": null,
+                "acceptValue": false,
+                "valueRequired": false,
+                "isArray": false,
+                "default": false,
+                "description": "Remove zip file after uploading"
+            },
+            "filename": {
+                "shortcut": "f",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Zip filename"
+            },
+            "header": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": true,
+                "default": [],
+                "description": "Override theme header"
+            },
+            "message": {
+                "shortcut": "m",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Release notes for this version"
+            },
+            "output-dir": {
+                "shortcut": "o",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": "../dist",
+                "description": "Output directory for the ZIP file"
+            },
+            "push": {
+                "shortcut": "p",
+                "acceptValue": false,
+                "valueRequired": false,
+                "isArray": false,
+                "default": false,
+                "description": "Push zip to repository"
+            },
+            "slug": {
+                "shortcut": "s",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Theme slug (if no slug is provided, current directory will be used)"
+            }
+        }
+    },
+    "theme info": {
+        "name": "theme info",
+        "description": "Get theme information from distant repository",
+        "aliases": [
+            "theme:info"
+        ],
+        "arguments": {
+            "slug": {
+                "required": true,
+                "isArray": false,
+                "default": null,
+                "description": "Theme slug"
+            }
+        },
+        "options": []
+    },
+    "theme init": {
+        "name": "theme init",
+        "description": "Start a new theme",
+        "aliases": [
+            "theme start",
+            "theme:init",
+            "theme:start"
+        ],
+        "arguments": {
+            "name": {
+                "required": false,
+                "isArray": false,
+                "default": null,
+                "description": "Theme name"
+            },
+            "slug": {
+                "required": false,
+                "isArray": false,
+                "default": null,
+                "description": "Theme slug"
+            }
+        },
+        "options": {
+            "author": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Author theme header"
+            },
+            "author-uri": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Author URI theme header"
+            },
+            "description": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Description theme header"
+            },
+            "domain-path": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Domain Path theme header"
+            },
+            "license": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "License theme header"
+            },
+            "license-uri": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "License URI theme header"
+            },
+            "requires-at-least": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Requires at least theme header"
+            },
+            "requires-php": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Requires PHP theme header"
+            },
+            "tags": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Tags theme header"
+            },
+            "text-domain": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Text Domain theme header"
+            },
+            "theme-uri": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Theme URI theme header"
+            },
+            "theme-version": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Version theme header"
+            }
+        }
+    },
+    "theme list": {
+        "name": "theme list",
+        "description": "List themes on the remote repository",
+        "aliases": [
+            "theme ls",
+            "theme:list",
+            "theme:ls"
+        ],
+        "arguments": [],
+        "options": {
+            "page": {
+                "shortcut": "p",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Page number"
+            },
+            "per-page": {
+                "shortcut": "c",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Number of items per page"
+            }
+        }
+    },
+    "theme manifest": {
+        "name": "theme manifest",
+        "description": "Get manifest from input file",
+        "aliases": [
+            "theme:manifest"
+        ],
+        "arguments": {
+            "input": {
+                "required": true,
+                "isArray": false,
+                "default": null,
+                "description": "Path to the theme main file"
+            }
+        },
+        "options": {
+            "get": {
+                "shortcut": null,
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Print a single header value instead of the whole manifest"
+            }
+        }
+    },
+    "theme push": {
+        "name": "theme push",
+        "description": "Push input zip to repository",
+        "aliases": [
+            "theme:push"
+        ],
+        "arguments": {
+            "artifact": {
+                "required": true,
+                "isArray": false,
+                "default": null,
+                "description": "Path to zip file"
+            }
+        },
+        "options": {
+            "clean": {
+                "shortcut": null,
+                "acceptValue": false,
+                "valueRequired": false,
+                "isArray": false,
+                "default": false,
+                "description": "Remove zip file after uploading"
+            },
+            "message": {
+                "shortcut": "m",
+                "acceptValue": true,
+                "valueRequired": true,
+                "isArray": false,
+                "default": null,
+                "description": "Release notes for this version"
+            }
+        }
+    }
+}

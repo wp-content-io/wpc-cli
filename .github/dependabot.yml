@@ -1,0 +1,49 @@
+# Weekly dependency updates. Minor and patch bumps are grouped into one PR per
+# ecosystem; a major bump gets its own PR (and its own review).
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: weekly
+    # composer.json pins the platform to PHP 8.2: the lock must keep
+    # resolving for the minimum supported version.
+    versioning-strategy: increase-if-necessary
+    groups:
+      composer-minor-patch:
+        update-types: [minor, patch]
+    labels: [dependencies]
+
+  # Build tools isolated by composer-bin-plugin (not shipped in the phar).
+  - package-ecosystem: composer
+    directories:
+      - /vendor-bin/box
+      - /vendor-bin/php-cs-fixer
+    schedule:
+      interval: weekly
+    groups:
+      build-tools-minor-patch:
+        update-types: [minor, patch]
+    labels: [dependencies]
+
+  # The workflows pin every action to a full commit SHA with a `# vX.Y.Z`
+  # comment: Dependabot bumps both together.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]
+    labels: [dependencies]
+
+  # The php:8.x-alpine base image. The PHP version itself is a build argument
+  # driven by the release matrix, so this mostly tracks composer:2.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      docker-minor-patch:
+        update-types: [minor, patch]
+    labels: [dependencies]

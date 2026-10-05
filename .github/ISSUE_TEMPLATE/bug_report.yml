@@ -1,0 +1,91 @@
+name: Bug report
+description: Something in wpc does not behave as documented.
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem.
+
+        > [!WARNING]
+        > **Redact your API key** everywhere below (`--api-key`, `WPC_API_KEY`, CI logs, `-vvv` output).
+        > If a key was ever pasted publicly, revoke it in the dashboard.
+        >
+        > Security problems must **not** be reported here — see the [security policy](https://github.com/wp-content-io/wpc-cli/security/policy).
+
+  - type: input
+    id: version
+    attributes:
+      label: wpc version
+      description: Output of `wpc --version`.
+      placeholder: wp-content.io CLI 2.1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: Install method
+      options:
+        - phar (downloaded / self-update)
+        - Docker image
+        - Composer (composer global require)
+        - From source (php bin/wpc)
+    validations:
+      required: true
+
+  - type: input
+    id: php
+    attributes:
+      label: PHP version
+      description: Output of `php -v` (first line). For the Docker image, its tag (e.g. `:2.1.0-php8.2`).
+      placeholder: PHP 8.3.12 (cli)
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and terminal
+      description: Include the CI provider if it happens in CI.
+      placeholder: macOS 15, iTerm2 / Ubuntu 24.04 in GitHub Actions
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: The exact command line, with the API key redacted.
+      render: shell
+      placeholder: wpc plugin push dist/acme.zip --output=json
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Include the exit code (`echo $?`) and whether the output went to stdout or stderr if it matters.
+    validations:
+      required: true
+
+  - type: textarea
+    id: json
+    attributes:
+      label: Output with --output=json
+      description: Run the same command with `--output=json` and paste the result (API key redacted).
+      render: json
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Verbose output (`-vvv`), plugin/theme header, screenshots of the interactive view…
